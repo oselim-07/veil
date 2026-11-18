@@ -1,0 +1,5 @@
+names = ["Max", "Anna Müller"]
+
+[[rules]]
+name = "patient_id"
+pattern = 'PAT-\d{6}'
