@@ -1,8 +1,8 @@
-# veil
+# Veil
 
 Keeps personal and health data out of your AI coding agent.
 
-veil wraps a command (or reads piped text) and replaces sensitive data with placeholders before an AI agent sees it. It also prints a report of what was hidden: counts only, never the data itself.
+Veil wraps a command (or reads piped text) and replaces sensitive data with placeholders before an AI agent sees it. It also prints a report of what was hidden: counts only, never the data itself.
 
 ## Usage
 
@@ -15,4 +15,4 @@ Emails, IBANs, insurance IDs, dates, phone numbers, passwords/tokens.
 
 ## Limits
 
-veil reduces risk but does not guarantee anything. Pattern matching cannot detect names yet. Use fake data for testing.
+Veil reduces risk but does not guarantee anything. Pattern matching cannot detect names yet. Use fake data for testing.
