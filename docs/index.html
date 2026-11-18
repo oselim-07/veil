@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>veil: keep patient data out of your AI agent</title>
+<meta name="description" content="veil hides personal and health data in command output before AI coding agents see it.">
+<style>
+  :root { --bg:#0e1116; --card:#161b22; --text:#e6edf3; --muted:#9aa4b2; --accent:#58a6ff; --line:#2a313c; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+  .wrap { max-width: 900px; margin: 0 auto; padding: 0 20px; }
+  header { padding: 80px 0 40px; text-align:center; }
+  h1 { font-size: 3rem; margin: 0 0 10px; letter-spacing: -1px; }
+  .tag { color: var(--muted); font-size: 1.2rem; max-width: 620px; margin: 0 auto 28px; }
+  .btn { display:inline-block; background:var(--accent); color:#04121f; padding:12px 22px; border-radius:8px; text-decoration:none; font-weight:600; margin:4px; }
+  .btn.alt { background:transparent; color:var(--text); border:1px solid var(--line); }
+  section { padding: 36px 0; border-top: 1px solid var(--line); }
+  h2 { margin-top:0; font-size:1.6rem; }
+  .grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap:16px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:18px; }
+  .card h3 { margin-top:0; }
+  pre { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:16px; overflow-x:auto; font-size:0.9rem; }
+  code { font-family: ui-monospace, Menlo, Consolas, monospace; }
+  .redacted { color:#ff7b72; }
+  table { width:100%; border-collapse: collapse; }
+  th, td { text-align:left; padding:10px; border-bottom:1px solid var(--line); }
+  a { color: var(--accent); }
+  footer { padding: 30px 0 60px; color: var(--muted); text-align:center; font-size:0.9rem; }
+  .note { color: var(--muted); font-size: 0.95rem; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>veil</h1>
+  <p class="tag">Keeps personal and health data out of your AI coding agent, with a report of what was hidden.</p>
+  <a class="btn" href="#download">Download</a>
+  <a class="btn alt" href="https://github.com/oselim-07/veil">View on GitHub</a>
+</header>
+
+<section id="problem">
+  <h2>The problem</h2>
+  <p>AI coding agents run commands and read the output. That output can contain patient names, insurance numbers, IBANs, emails and passwords. Once it is in the agent's context, it has left your machine. Teams that handle health data in Europe have to follow the principles of data minimisation and data protection by design, but nothing sits between the terminal and the agent to help with that.</p>
+</section>
+
+<section id="how">
+  <h2>What veil does</h2>
+  <div class="grid">
+    <div class="card"><h3>Hides sensitive data</h3><p>Emails, IBANs, insurance IDs, dates, phone numbers and passwords are replaced with placeholders.</p></div>
+    <div class="card"><h3>Wraps any command</h3><p><code>veil run -- cat patient.txt</code> runs the command and cleans the output. The exit code is preserved.</p></div>
+    <div class="card"><h3>Audit report</h3><p><code>--report</code> shows how many items of each type were hidden. Counts only, never the data.</p></div>
+    <div class="card"><h3>Your own rules</h3><p>A <code>veil.toml</code> file adds names and custom ID formats, such as your clinic's patient numbers.</p></div>
+  </div>
+</section>
+
+<section id="demo">
+  <h2>Demo (fake data)</h2>
+  <p>Input:</p>
+<pre><code>Patient Max (PAT-123456), contact Anna Müller, born 12.03.1985, mail max@clinic.de</code></pre>
+  <p>Command:</p>
+<pre><code>veil run --report -- cat patient.txt</code></pre>
+  <p>What the agent sees:</p>
+<pre><code>Patient <span class="redacted">[REDACTED:name]</span> (<span class="redacted">[REDACTED:patient_id]</span>), contact <span class="redacted">[REDACTED:name]</span>, born <span class="redacted">[REDACTED:date]</span>, mail <span class="redacted">[REDACTED:email]</span>
+--- veil report ---
+email: 1
+date: 1
+patient_id: 1
+name: 2</code></pre>
+</section>
+
+<section id="who">
+  <h2>Who it is for</h2>
+  <p>Health-tech startups, clinics and digital health teams in Europe (especially DACH) that use AI coding agents on projects touching personal data. Typical users: developers, data engineers and the people responsible for data protection in those teams.</p>
+</section>
+
+<section id="download">
+  <h2>Download</h2>
+  <p>Single static binary, no installation, no network calls.</p>
+  <table>
+    <tr><th>Platform</th><th>File</th></tr>
+    <tr><td>Linux ARM (aarch64)</td><td><a href="https://github.com/oselim-07/veil/releases/download/v0.2.1/aarch64-unknown-linux-musl.tar.gz">aarch64-unknown-linux-musl.tar.gz</a></td></tr>
+    <tr><td>Linux x86_64</td><td><a href="https://github.com/oselim-07/veil/releases/download/v0.2.1/x86_64-unknown-linux-musl.tar.gz">x86_64-unknown-linux-musl.tar.gz</a></td></tr>
+    <tr><td>macOS Apple Silicon</td><td><a href="https://github.com/oselim-07/veil/releases/download/v0.2.1/aarch64-apple-darwin.tar.gz">aarch64-apple-darwin.tar.gz</a></td></tr>
+    <tr><td>macOS Intel</td><td><a href="https://github.com/oselim-07/veil/releases/download/v0.2.1/x86_64-apple-darwin.tar.gz">x86_64-apple-darwin.tar.gz</a></td></tr>
+    <tr><td>Windows x86_64</td><td><a href="https://github.com/oselim-07/veil/releases/download/v0.2.1/x86_64-pc-windows-msvc.zip">x86_64-pc-windows-msvc.zip</a></td></tr>
+  </table>
+  <p class="note">Linux example: <code>tar -xzf aarch64-unknown-linux-musl.tar.gz &amp;&amp; ./veil --help</code></p>
+</section>
+
+<section id="pricing">
+  <h2>Pricing</h2>
+  <div class="grid">
+    <div class="card"><h3>Free</h3><p>The core tool, open source. Individuals and small projects.</p></div>
+    <div class="card"><h3>Team (planned)</h3><p>Shared rule packs for health and EU data formats, exportable audit reports and central policy for the whole team.</p></div>
+  </div>
+  <p class="note">Open source builds trust, and teams pay for what they need to run it across an organisation.</p>
+</section>
+
+<section id="growth">
+  <h2>How veil reaches its users</h2>
+  <p>Open source on GitHub, short posts and demos for developers and health-tech communities, and practical guides on keeping personal data out of AI tools. Early users give feedback on rules for their own data formats.</p>
+</section>
+
+<section id="limits">
+  <h2>Limits (please read)</h2>
+  <p>veil reduces risk but does not guarantee that nothing sensitive gets through. It uses pattern matching and a list of names you provide, so it can miss unusual formats. It hides all dates, not only birth dates. It is not legal advice and does not make a team compliant with GDPR or any other regulation. Test with fake data only.</p>
+</section>
+
+<section id="roadmap">
+  <h2>Roadmap</h2>
+  <p>JSON report export, a hook for supported coding agents, and more rule packs for European data formats.</p>
+</section>
+
+<footer>
+  Built by Omar Selim, Health Informatics student at THD (ECRI). <a href="https://github.com/oselim-07/veil">Source on GitHub</a>
+</footer>
+
+</div>
+</body>
+</html>
